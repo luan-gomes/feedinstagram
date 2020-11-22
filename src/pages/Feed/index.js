@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { StyleSheet, FlatList,Button , View, ScrollView, TextInput} from 'react-native';
+import { StyleSheet, FlatList, Button, View, ScrollView, TextInput } from 'react-native';
 import axios from 'axios'
 import LazyImage from '../../components/LazyImage';
 import { AsyncStorage } from 'react-native';
 
-
+//Comentário
 import { Container, Post, Header, Avatar, Name, Description, Loading } from './styles';
 
 export default function Feed() {
@@ -30,25 +30,25 @@ export default function Feed() {
     //https://5fa103ace21bab0016dfd97e.mockapi.io/api/v1/feed?page=1&limit=4
     //utilizar o server2.js no www.mockapi.io
     axios
-    .get(`https://5fa103ace21bab0016dfd97e.mockapi.io/api/v1/feed?page=${pageNumber}&limit=4`)
-    .then(response => {
-      const totalItems = response.headers["x-total-count"]
-      const data = response.data
-      //console.log(data)
-      setLoading(false)
-      setTotal(Math.floor(totalItems / 4));
-      setPage(pageNumber + 1);
-      setFeed(shouldRefresh ? data : [...feed, ...data]);
-    })
-    .catch(err => {
-      setError(err.message);
-      setLoading(true)
-    })
+      .get(`https://5fa103ace21bab0016dfd97e.mockapi.io/api/v1/feed?page=${pageNumber}&limit=4`)
+      .then(response => {
+        const totalItems = response.headers["x-total-count"]
+        const data = response.data
+        //console.log(data)
+        setLoading(false)
+        setTotal(Math.floor(totalItems / 4));
+        setPage(pageNumber + 1);
+        setFeed(shouldRefresh ? data : [...feed, ...data]);
+      })
+      .catch(err => {
+        setError(err.message);
+        setLoading(true)
+      })
   }
 
   async function refreshList() {
     setRefreshing(true);
-    
+
     await loadPage(1, true);
 
     setRefreshing(false);
@@ -62,7 +62,7 @@ export default function Feed() {
       if (value !== null) {
         // We have data!!
         setComentarios(value)
-      } 
+      }
     } catch (error) {
       // Error saving data
     }
@@ -77,55 +77,55 @@ export default function Feed() {
     }
   }
 
-    
+
 
   useEffect(() => {
     loadPage()
   }, []);
 
- 
 
-  const renderItem = ({item}) => {
+
+  const renderItem = ({ item }) => {
     return (
       <Post>
-            <Header>
-              <Avatar source={{ uri: item.author.avatar }} />
-              <Name>{item.author.name}</Name>
-            </Header>
+        <Header>
+          <Avatar source={{ uri: item.author.avatar }} />
+          <Name>{item.author.name}</Name>
+        </Header>
 
-            <LazyImage
-              aspectRatio={item.aspectRatio} 
-              shouldLoad={viewable.includes(item.id)} 
-              smallSource={{ uri: item.small }}
-              source={{ uri: item.image }}
-            />
+        <LazyImage
+          aspectRatio={item.aspectRatio}
+          shouldLoad={viewable.includes(item.id)}
+          smallSource={{ uri: item.small }}
+          source={{ uri: item.image }}
+        />
 
-            <Description>
-              <Name>{item.author.name}</Name> {item.description}
-            </Description>
-            <Description>
-              {comentarios}
-            </Description>
-           
+        <Description>
+          <Name>{item.author.name}</Name> {item.description}
+        </Description>
+        <Description>
+          {comentarios}
+        </Description>
 
-            <TextInput
-              multiline={true}
-              onChangeText={(text) => setText(text)}
-              placeholder={"Comentários"}
-              style={[styles.text]}
-              maxLength={MAX_LENGTH}
-              value={text}/>
 
-            <Button
-              title="Salvar"
-              onPress={() => onSave(String(item.id))}
-              accessibilityLabel="Salvar">
-            </Button>
+        <TextInput
+          multiline={true}
+          onChangeText={(text) => setText(text)}
+          placeholder={"Comentários"}
+          style={[styles.text]}
+          maxLength={MAX_LENGTH}
+          value={text} />
+
+        <Button
+          title="Salvar"
+          onPress={() => onSave(String(item.id))}
+          accessibilityLabel="Salvar">
+        </Button>
 
       </Post>
     )
   }
-  
+
   const handleViewableChanged = useCallback(({ changed }) => {
     setViewable(changed.map(({ item }) => item.id));
   }, []);
@@ -153,13 +153,15 @@ export default function Feed() {
 }
 
 const styles = StyleSheet.create(
-  {text: {
-    fontSize: 30,
-    lineHeight: 33,
-    color: "#333333",
-    padding: 16,
-    paddingTop: 16,
-    minHeight: 170,
-    borderTopWidth: 1,
-    borderColor: "rgba(212,211,211, 0.3)"
-}})
+  {
+    text: {
+      fontSize: 30,
+      lineHeight: 33,
+      color: "#333333",
+      padding: 16,
+      paddingTop: 16,
+      minHeight: 170,
+      borderTopWidth: 1,
+      borderColor: "rgba(212,211,211, 0.3)"
+    }
+  })
