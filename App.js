@@ -12,10 +12,7 @@ export default function App() {
   return (
     <View style={style.container}>
       <NavigationContainer>
-        <Stack.Navigator
-          initialRouteName="Cadastro"
-          screenOptions={screenOptions}
-        >
+        <Stack.Navigator initialRouteName="Login" screenOptions={screenOptions}>
           <Stack.Screen
             name="Login"
             component={Login}
