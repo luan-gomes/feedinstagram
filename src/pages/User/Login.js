@@ -1,7 +1,16 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Button, Alert } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  Image,
+  Alert,
+  TouchableOpacity,
+} from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-community/async-storage';
+import instagram2x from '../../assets/instagram2x.png';
 
 export default (props) => {
   const [username, setUsername] = useState();
@@ -42,9 +51,15 @@ export default (props) => {
     //await AsyncStorage.setItem('users', JSON.stringify(savedUsers));
     //
   }
+  function handleCad() {
+    props.navigation.navigate('Cadastro');
+  }
 
   return (
     <View style={style.form}>
+      <View style={style.insta}>
+        <Image source={instagram2x} />
+      </View>
       <Text>Username</Text>
       <TextInput
         onChangeText={handleUsernameChange}
@@ -58,18 +73,38 @@ export default (props) => {
         placeholder="Informe a senha"
       />
       <Button title="Entrar" onPress={handleButtonPress} />
+      <View style={style.insta}>
+        <TouchableOpacity onPress={handleCad}>
+          <Text style={style.cadText}>
+            Não tem uma conta? Clique aqui e cadastre-se
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
 
 const style = StyleSheet.create({
   form: {
-    padding: 12,
+    padding: 15,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'stretch',
   },
   input: {
     height: 40,
     borderColor: 'grey',
     borderWidth: 1,
     marginBottom: 15,
+  },
+  insta: {
+    paddingTop: 30,
+    paddingBottom: 30,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  cadText: {
+    fontWeight: 'bold',
   },
 });

@@ -1,12 +1,5 @@
 import React, { useState } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  Button,
-  TouchableOpacity,
-  Image,
-} from 'react-native';
+import { View, TouchableOpacity, Image } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import like from '../assets/like.png';
 import dislike from '../assets/dislike.png';
@@ -44,19 +37,10 @@ export default (props) => {
       }
     }
   }
-  async function handleCurtidas() {
-    let savedLikes = [];
-    const response = await AsyncStorage.getItem('likes');
-    if (response) savedLikes = JSON.parse(response);
-    console.log(savedLikes);
-  }
   return (
     <View>
       <TouchableOpacity onPress={changeLikeStatus}>
         <Image source={likeImage} />
-      </TouchableOpacity>
-      <TouchableOpacity onPress={handleCurtidas}>
-        <Text>Curtidas</Text>
       </TouchableOpacity>
     </View>
   );

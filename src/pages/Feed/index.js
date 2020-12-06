@@ -6,12 +6,13 @@ import {
   View,
   ScrollView,
   TextInput,
-  Image,
+  Text,
   TouchableOpacity,
 } from 'react-native';
 import axios from 'axios';
 import LazyImage from '../../components/LazyImage';
 import Like from '../../components/Like';
+import Comment from '../../components/Comment';
 import { AsyncStorage } from 'react-native';
 
 //Comentário
@@ -34,7 +35,6 @@ export default function Feed(props) {
   const [viewable, setViewable] = useState([]);
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-  const [text, setText] = useState('');
   const [comentarios, setComentarios] = useState([]);
 
   const MAX_LENGTH = 250;
@@ -75,33 +75,20 @@ export default function Feed(props) {
     setRefreshing(false);
   }
 
-  const onGet = (id) => {
-    try {
-      const value = AsyncStorage.getItem(id);
-
-      if (value !== null) {
-        // We have data!!
-        setComentarios(value);
-      }
-    } catch (error) {
-      // Error saving data
-    }
-  };
-
-  const onSave = async (id) => {
-    try {
-      await AsyncStorage.setItem(id, text);
-      setComentarios([...comentarios, ...text]);
-    } catch (error) {
-      // Error saving data
-    }
-  };
-
   useEffect(() => {
     loadPage();
   }, []);
 
   const renderItem = ({ item }) => {
+    function handleCurtidas() {
+      props.navigation.navigate('Likes', item);
+    }
+    function handleComentarios() {
+      props.navigation.navigate('Comentarios', {
+        item,
+        user: props.route.params.user,
+      });
+    }
     return (
       <Post key={item.id}>
         <Header>
@@ -115,28 +102,25 @@ export default function Feed(props) {
           smallSource={{ uri: item.small }}
           source={{ uri: item.image }}
         />
+        <View style={styles.containerCurtidas}>
+          <Like key={item.id} item={item} user={props.route.params.user} />
+          <TouchableOpacity style={styles.heart} onPress={handleCurtidas}>
+            <Text>Ver todas as curtidas</Text>
+          </TouchableOpacity>
+        </View>
 
         <Description>
           <Name>{item.author.name}</Name> {item.description}
         </Description>
         <Description>{comentarios}</Description>
 
-        <Like key={item.id} item={item} user={props.route.params.user} />
+        <Comment item={item} user={props.route.params.user} />
 
-        <TextInput
-          multiline={true}
-          onChangeText={(text) => setText(text)}
-          placeholder={'Comentários'}
-          style={[styles.text]}
-          maxLength={MAX_LENGTH}
-          value={text}
-        />
-
-        <Button
-          title="Salvar"
-          onPress={() => onSave(String(item.id))}
-          accessibilityLabel="Salvar"
-        ></Button>
+        <View style={styles.containerComentarios}>
+          <TouchableOpacity onPress={handleComentarios}>
+            <Text>Ver todos os comentários</Text>
+          </TouchableOpacity>
+        </View>
       </Post>
     );
   };
@@ -177,5 +161,19 @@ const styles = StyleSheet.create({
     minHeight: 170,
     borderTopWidth: 1,
     borderColor: 'rgba(212,211,211, 0.3)',
+  },
+  containerCurtidas: {
+    padding: 15,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  containerComentarios: {
+    padding: 15,
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  heart: {
+    marginLeft: 10,
   },
 });
