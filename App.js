@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Button } from 'react-native';
 import Feed from './src/pages/Feed';
 import Cadastro from './src/pages/User/Cadastro';
 import Login from './src/pages/User/Login';
+import Likes from './src/pages/Posts/Likes';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
@@ -25,6 +26,13 @@ export default function App() {
             component={Cadastro}
             options={{
               title: 'Formulário de Cadastro',
+            }}
+          />
+          <Stack.Screen
+            name="Likes"
+            component={Likes}
+            options={{
+              title: 'Likes',
             }}
           />
           <Stack.Screen name="Feed" component={Feed} />

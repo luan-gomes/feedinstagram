@@ -26,7 +26,13 @@ export default (props) => {
     );
 
     if (currentUser) {
-      props.navigation.navigate('Feed', currentUser);
+      props.navigation.navigate('Feed', {
+        user: {
+          name: currentUser.name,
+          username: currentUser.username,
+          password: currentUser.password,
+        },
+      });
     } else {
       Alert.alert('Usuário não cadastrado');
     }
